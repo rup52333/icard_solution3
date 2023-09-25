@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
-import Logo from './assets/images/rvssGroup.png';
+import React, { useState,useContext } from 'react';
+import Logo from './assets/images/rvssGroup_white.png';
 import 'admin-lte/plugins/fontawesome-free/css/all.min.css';
 import 'admin-lte/plugins/daterangepicker/daterangepicker.js' ;
 import 'admin-lte/dist/css/adminlte.min.css';
 import 'admin-lte/dist/js/adminlte.min.js';
 import ImageUpload from './ImageUpload.js';
 import AdminLteStudentForm from './AdminLTELayout_student.js';
+import {IcardContext} from './Context/DataProvider.jsx';
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from 'axios';
-
+import Icard_template from './template/Icard_template.jsx';
 
 const school_id = Math.random().toString(36).slice(2);
 
 const AdminLteSchoolForm = (props)  =>{
+
+   const {idcardtemplate}= useContext(IcardContext); // Import and destructure setAccount
+   
+   const {setSchoolData}= useContext(IcardContext); // Import and destructure setAccount
+   
+  console.log(idcardtemplate);
+
+
+
     const navigate = useNavigate();
     const [formState, setFormState] = useState({});
     const [startDate, setStartDate] = useState(new Date());
@@ -83,7 +93,7 @@ const AdminLteSchoolForm = (props)  =>{
         school_status:"SUBMITTED",
         school_adminEmail: school_email,
         school_registration_date: school_registration_date,
-        icard_template:"template_1",
+        icard_template:idcardtemplate,
         phones: phones,
         principal: principal,
         schoolFiles: schoolFiles
@@ -91,17 +101,19 @@ const AdminLteSchoolForm = (props)  =>{
     }
 
     const handleChange = (e) => {
-      /*setFormState({
+       setFormState({
         ...formState,
         [e.target.name]: e.target.value
-      });*/
+      });
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
          
     }
+   
     const handleImageUpload = (data) => {
+   
      
-       // alert("Image Data "+data.imageId+"  "+data.file_name);
+       console.log("Image Data "+data.imageId+"  "+data.file_name);
       if(data.imageId=='1'){
          formData.school_image1=data.file_name;
          formData.school_image1_location=data.location;
@@ -113,25 +125,24 @@ const AdminLteSchoolForm = (props)  =>{
   
    };
     console.log("School id "+school_id+"  "+formData.school_image2_location+"   "+formData.school_image1_location)
-   /*if (!formData.school_image1 
-      && !formData.school_image2 
-      && !formData.school_name 
-      && !formData.school_address){
-         setSubmitData =  true;
-    }*/
+  
      
     const handleSubmit = (e) => {
+      if (
+         formData.principal_mobile_number &&
+         formData.school_name &&
+         formData.school_mobile_number &&
+         formData.school_fax &&
+         formData.principal_name &&
+         formData.school_address &&
+         formData.school_image1_location &&
+         formData.school_image2_location
+       )
       
+     { 
       e.preventDefault();
       // Handle form submission here
-      if ( formData.principal_mobile_number 
-         && formData.school_name 
-         && formData.school_mobile_number 
-         && formData.school_fax
-         && formData.principal_name 
-         && formData.school_address 
-         && formData.school_image1_location
-         && formData.school_image2_location){
+   
       var principal_phones=createPhones(formData.principal_mobile_number,formData.school_fax)
       var school_phones=createPhones(formData.school_mobile_number,formData.school_fax)
       var principal = createPrincipal(formData.principal_salutation,formData.principal_name,formData.principal_email,principal_phones);
@@ -139,28 +150,15 @@ const AdminLteSchoolForm = (props)  =>{
          formData.school_image1_location,formData.school_image2,formData.school_image2_location);
       var school=createSchool(school_id,formData.school_name,formData.school_email,formData.school_registration_date,
          formData.school_address,formData.school_city,formData.school_state,formData.school_pincode,school_phones,principal,schoolFiles);
-      
-      
-      const url = 'http://localhost:8081/info/schools/api/v1/insertNewSchool';
-      const details =  axios.post(url, JSON.stringify(school), {
-         headers: {
-           'Content-Type': 'application/json'
-         }
-       })
-         .then(response => {
-          alert(" API Response "+JSON.stringify(response.data));
-       }).then((response) => {
-          navigate("./schoolSuccess");
-       })
-         .catch(error => {
-           // Handle any errors
-           console.error(error);
-         });
-        
-         } /* End of Validation */
-       else{
-          alert("Please check the form ");
-       }
+         
+           console.log(school);
+         // console.log(formData);
+         setSchoolData(school);
+          navigate(`/school/schoolSuccess`)
+}
+else{
+   alert("Please fill in all required fields and upload images.");
+}
       
     }
    return (
@@ -337,32 +335,42 @@ const AdminLteSchoolForm = (props)  =>{
              </div>
            </aside>
          <div class="content-wrapper">
-           
+
+
+          
         <div className="card">
-         
-        <section class="content-header">
-               <div class="container-fluid">
-                  <div class="row mb-2">
-                     <div class="col-sm-6">
-                        <h1>School Registration</h1>
-                     </div>
-                     <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                           <li class="breadcrumb-item"><a href="javascript:appStudent()">Home</a></li>
-                           <li class="breadcrumb-item"><a href="appStudent"></a>Student Form</li>
-                           <script>
-                                function appStudent() {
-                                <div className="wrapper">
-                                <AdminLteStudentForm />
-                                </div>}
-                            </script>
-                        </ol>
-                     </div>
-                  </div>
-               </div>
+
+
+        <section class="content-header" style={{marginTop:'10px'}}>
+
             </section>
 
+
         <section class="content">
+        <div class="container-fluid">
+               
+               <div style={{textAlign:'center'}}>
+                  <h2>School Registration</h2>
+               </div>
+              
+          
+            <div>
+              <span>
+              <h4 style={{textAlign:'center'}}>Select your template by clicking on the template </h4>
+              </span>
+            <div style={{width: '100%',
+            height:'100%',
+  borderRadius: '12px',
+  paddingTop: '2%',
+  
+  }} >
+              <Icard_template/>
+            </div>
+
+            </div>
+          
+
+         </div>
         <div class="container-fluid">
         <div class="row">
         <div class="col-md-6">
@@ -406,7 +414,7 @@ const AdminLteSchoolForm = (props)  =>{
               onChange={handleChange} 
               value = {formData.school_city}/>
             </div>
-            <div class="form-group">
+            <div class="form-group">npm 
             
                      <label>State</label>
                                           <select class="custom-select" id="school_state" 

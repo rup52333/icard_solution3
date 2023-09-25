@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import Logo from './assets/images/rvssGroup.png';
+import React, { useState,useContext } from 'react';
+import Logo from './assets/images/rvssGroup_white.png';
 import 'admin-lte/plugins/fontawesome-free/css/all.min.css';
 import 'admin-lte/plugins/daterangepicker/daterangepicker.js' ;
 import 'admin-lte/dist/css/adminlte.min.css';
 import 'admin-lte/dist/js/adminlte.min.js';
 
 import { useNavigate } from "react-router-dom";
+import { IcardContext } from './Context/DataProvider.jsx';
 
 
 const AdminLteSchoolSuccessForm = (props) => {
+   const {idcardtemplate } = useContext(IcardContext); // Import and destructure setAccount
+   const {schoolData } = useContext(IcardContext);
+   const {icardlogo } = useContext(IcardContext);
+   console.log(idcardtemplate);
+   console.log(schoolData);
+
+
    const handleSubmit = (e) => { e.preventDefault()}
     return (
       
@@ -204,8 +212,7 @@ const AdminLteSchoolSuccessForm = (props) => {
                   </div>
                </div>
             </section>
-
-        <section class="content">
+            <section class="content">
         <div class="container-fluid">
         <div class="row">
         <div class="col-md-6">
@@ -216,39 +223,39 @@ const AdminLteSchoolSuccessForm = (props) => {
           </div>
           <form onSubmit={handleSubmit}>
           <div className="form-group" color="#GEGEGE">
-          <label htmlFor="inputName">School Id is  </label>
+          <label htmlFor="inputName">School Id is: {schoolData.school_id}  </label>
             </div>
             <div className="form-group">
-              <label htmlFor="inputName">School Name is </label>
+              <label htmlFor="inputName">School Name is: {schoolData.school_name} </label>
               
               <script>
                  //alert("school name");
               </script>
             </div>
             <div className="form-group">
-              <label htmlFor="inputName">Date of Registration</label>
+              <label htmlFor="inputName">Date of Registration: {schoolData.school_registration_date.toISOString().split('T')[0]}</label>
               
             </div>
             <div className="form-group">
-              <label htmlFor="inputName">School Address</label>
+              <label htmlFor="inputName">School Address: {schoolData.school_address}  </label>
               
             </div>
             <div className="form-group">
-              <label htmlFor="inputName">School City</label>
+              <label htmlFor="inputName">School City: {schoolData.school_city}  </label>
               
             </div>
             <div class="form-group">
             
-                     <label>State</label>                    
+                     <label>State {schoolData.school_state}  </label>                    
             </div>
             <div className="form-group">
-              <label htmlFor="inputName">Pincode</label>
+              <label htmlFor="inputName">Pincode: {schoolData.school_pincode}  </label>
               
             </div>
 <div class="row">
     <div class="col-12 col-sm-6">
        <div className="form-group">
-              <label htmlFor="inputName">School Phone Number 1</label>
+              <label htmlFor="inputName">School Phone Number 1: {schoolData.phones.mobile_number}</label>
               <div class="input-group-prepend">
                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
                         
@@ -256,7 +263,7 @@ const AdminLteSchoolSuccessForm = (props) => {
               
        </div>
        <div className="form-group">
-              <label htmlFor="inputName">School Phone Number 2</label>
+              <label htmlFor="inputName">School Phone Number 2: {schoolData.phones.fax}  </label>
               <div class="input-group-prepend">
               <span class="input-group-text"><i class="fas fa-phone"></i></span>
               
@@ -267,7 +274,7 @@ const AdminLteSchoolSuccessForm = (props) => {
 
             
             <div className="form-group">
-              <label htmlFor="inputEmail">School Admin Email</label>
+              <label htmlFor="inputEmail">School Admin Email: {schoolData.school_adminEmail}   </label>
               <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
               </div>
@@ -275,24 +282,24 @@ const AdminLteSchoolSuccessForm = (props) => {
             </div>
         <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Principal Details</h3>
+            <h3 class="card-title">Principal Details </h3>
         </div> 
         <div class="form-group">
-                     <label>Salutation</label>
+                     <label>Salutation: {schoolData.principal.salutation}  </label>
         </div>
         <div className="form-group">
-              <label htmlFor="inputName">Principal Name</label>
+              <label htmlFor="inputName">Principal Name:  {schoolData.principal.name}   </label>
         </div>
         <div className="form-group">
              
-              <label htmlFor="inputName">Principal Mobile Number</label>
+              <label htmlFor="inputName">Principal Mobile Number: {schoolData.phones.mobile_number}  </label>
               
               <div class="input-group-prepend">
               <span class="input-group-text"><i class="fas fa-phone"></i></span>
               </div>
        </div>
         <div className="form-group">
-              <label htmlFor="inputEmail">Principal Email</label>
+              <label htmlFor="inputEmail">Principal Email: {schoolData.principal.email}  </label>
               <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
               </div>
@@ -307,15 +314,396 @@ const AdminLteSchoolSuccessForm = (props) => {
         </div>
         <div class="col-md-6">
         <div class="card card-primary">
-        <div class="card-header">
+        <div class="card-header" >
             <h3 class="card-title">Image Upload</h3>
-        </div> 
+
+        </div>
+        <div class="form-group">
+           <label htmlFor="inputName">ICard Template For School</label>
+            <div className="wrapper"style={{display:'flex',justifyContent:'center',alignItems:'center',margin:'25px',width:'650px'}}>
+            <div
+  style={{
+   width: '100%', // Set the desired width
+   height: '100%', // Set the desired height
+   overflow: 'hidden', // Hide any content that overflows the container
+  
+ }}
+>
+{
+idcardtemplate==='template1'?
+(   <div className="row">
+<div className="col-6" id="template1">
+<div style={{
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%',
+  width: '100%',
+}}>
+  <div style={{
+    width: '400px',
+    borderRadius: '12px',
+    paddingTop: '2%',
+    backgroundColor: '#0f3460',
+    overflow: 'hidden'
+  }}>
+    <div style={{
+      fontFamily: 'Gilroy',
+      color: 'white',
+      fontSize: '2rem',
+      textAlign: 'center',
+      padding: '2%'
+    }}>Verbina Pre School</div>
+    <p style={{
+      fontFamily: 'Open Sans, sans-serif',
+      color: 'white',
+      textAlign: 'center'
+    }}>{schoolData.school_address} </p>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '5%'
+    }}>
+      <div style={{
+        backgroundColor: '#e94560',
+        height: '140px',
+        width: '140px',
+        borderRadius: '50%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <div style={{
+          height: '120px',
+          width: '120px',
+          overflow: 'hidden',
+          borderRadius: '50%'
+        }}>
+        
+ {/* <img src={schoolData.schoolFiles.image1_id} alt="Student" style={{ width: '100%' }} />
+ */}
+
+        </div>
+      </div>
+    </div>
+    <div style={{
+      color: 'white',
+      textAlign: 'center',
+      fontFamily: 'Gilroy',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      marginTop: '2%'
+    }}>
+      Akash Kumar Sinha
+    </div>
+    <div style={{
+      backgroundColor: '#e94560',
+      height: '28%',
+      marginTop: '10%',
+      borderTopLeftRadius: '75px',
+      padding: '7%',
+      color: 'white',
+      fontFamily: 'Open Sans, sans-serif',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderTop: '5px solid white'
+    }}>
+      <div style={{ width: '50%' }}>
+    <ul className="details-list" style={{ marginTop: '2%', fontSize: '0.8rem' }}>
+    <li>Father name:</li>
+                     <li>D.O.B:</li>
+                     <li>Blood Group:</li>
+                     <li>Contact No:</li>
+             
+  <li>Adress:</li>
+        </ul> 
+         
+
+      </div>
+      <div style={{ width: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <img src={icardlogo} alt="Student" style={{ width: '100%' }} />
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+      </div>
+)
+:idcardtemplate === 'template2' ? 
+
+( 
+    <div className="row">
+<div className="col-6" id="template2">
+<div style={{
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%'
+}}>
+  <div style={{
+    width: '400px',
+    borderRadius: '12px',
+    paddingTop: '2%',
+    backgroundColor: '#E5E4E2', // Golden Yellow
+    overflow: 'hidden',
+    
+  }}>
+    <div style={{
+      fontFamily: 'Arial, sans-serif', // Changed font
+      color: '#1E8449', // Green
+      fontSize: '2rem',
+      textAlign: 'center',
+      padding: '2%',
+      fontSize:'25px',
+      display:'flex'
+    }}><div style={{ width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <img src={icardlogo} alt="Student" style={{ width: '100%' }} />
+
+  </div>Verbina Pre School</div>
+    <p style={{
+      fontFamily: 'Verdana, sans-serif', // Changed font
+      color: '#D35400', // Orange
+      textAlign: 'center',
+      fontSize:'12px'
+    }}>{schoolData.school_address} </p>
+    
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '5%'
+    }}>
+      <div style={{
+        backgroundColor: '#E74C3C', // Red
+        height: '140px',
+        width: '140px',
+        borderRadius: '10%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <div style={{
+          height: '120px',
+          width: '120px',
+          overflow: 'hidden',
+          borderRadius: '50%'
+        }}>
+
+{/* <img src={obj.icardImage} alt="Student" style={{ width: '100%' }} /> */}
+
+        </div>
+      </div>
+    </div>
+    <div style={{
+      color: '#3498DB', // Blue
+      textAlign: 'center',
+      fontFamily: 'Tahoma, sans-serif', // Changed font
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      marginTop: '2%'
+    }}>
+      Akash Kumar Sinha
+    </div>
+    <div style={{
+      backgroundColor: '#033E3E', // Purple
+      height: '28%',
+      marginTop: '10%',
+      border: '10%',
+      padding: '7%',
+      color: 'white',
+      fontFamily: 'Calibri, sans-serif', // Changed font
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderTop: '5px solid white'
+    }}>
+      <div style={{ width: '100%' }}>
+    <ul className="details-list" style={{ marginTop: '2%', fontSize: '0.8rem' }}>
+    <li>Father name:</li>
+                     <li>D.O.B:</li>
+                     <li>Blood Group:</li>
+                     <li>Contact No:</li>
+             
+  <li>Adress:</li>
+        </ul> 
+         
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+</div>)
+:
+
+(
+<div className="row">
+  <div className="col-6" id="template3">
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+
+    }}>
+      <div style={{
+        width: '350px', // Reduced the width
+        borderRadius: '2px', // Smaller border radius
+        paddingTop: '2%',
+        paddingLeft:'2%',
+        backgroundColor: '#E5E4E2', // Orange
+        overflow: 'hidden',
+      }}>
+        <div style={{backgroundColor:'#3F000F'}}>
+        <div style={{
+          fontFamily: 'Arial, sans-serif',
+          color: '#3498DB', // Blue
+          fontSize: '2rem',
+          textAlign: 'center',
+          padding: '2%',
+          fontSize: '25px',
+          display: 'flex',
+          height:'100%'
+        }}>
+          <div style={{ width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={schoolData.schoolFiles.image1_id} alt="Student" style={{ width: '100%' }} />
+
+          </div>
+          Verbina Pre School
+
+        </div>
+        <p style={{
+          fontFamily: 'Verdana, sans-serif',
+          color: '#E74C3C', // Red
+          textAlign: 'center',
+          fontSize: '12px', // Increased font size
+          marginLeft:'30%'
+        }}>{schoolData.school_address} </p>
+       </div>
+       <div style={{
+          color: '#D35400', // Orange
+          textAlign: 'center',
+          fontFamily: 'Tahoma, sans-serif',
+          fontSize: '1.2rem', // Increased font size
+          fontWeight: 'bold',
+          paddingTop:'10%'
+
+        }}>
+          Identity Card
+        </div>
+      
+        <div style={{
+          
+          height: '20%', // Reduced height
+        
+
+          padding: '2%',
+          color: 'white',
+          fontFamily: 'Calibri, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+         
+        }}>
+            <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '5%',
+        }}>
+          <div style={{
+            backgroundColor: '#1E8449', // Green
+            height: '90px', // Reduced height
+            width: '90px', // Reduced width
+            // borderRadius: '50%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+            <div style={{
+              height: '100px', // Reduced height
+              width: '100px', // Reduced width
+              overflow: 'hidden',
+             border:"1px solid white",
+             backgroundColor: 'white',
+            
+              padding:'3'
+            }}>
+
+    {/* <img src={obj.icardImage} alt="Student" style={{ width: '100%' }} /> */}
+
+            </div>
+          </div>
+        </div>
+        
+          <div style={{ width: '100%' }}>
+          
+          <ul className="details-list" style={{ marginTop: '5%', fontSize: '0.8rem' ,color:'black'}}>
+             <li> Name:</li>
+             <li>Father name:</li>
+                     <li>D.O.B:</li>
+                     <li>Blood Group:</li>
+                     <li>Contact No:</li>
+             
+                   </ul>
+
+          
+          </div>
+        
+          
+        </div>
+        <div style={{
+          color: '#D35400', // Orange
+          
+          fontFamily: 'Tahoma, sans-serif',
+           // Increased font size
+          
+
+          width:'100%'
+        }}>
+         <div style={{fontSize: '0.6rem',fontWeight: 'bold',textAlign: 'right',marginTop: '10%',padding:'2%'}}
+         >    <p style={{marginLeft:'60%',textAlign: 'center',color: 'black',fontFamily: 'Cedarville Cursive'}}>
+          Amitava Ghosh
+         </p>HEADMASTER'S SIGNATURE</div>
+        </div>
+
+        <div style={{width:'100%',padding:'3%',marginBottom:'20%',fontFamily: 'Tahoma, sans-serif',color: '#D35400',}}><span><h4>Adress</h4></span>
+        <p style={{ fontSize: '0.8rem', color: 'black' }}>
+ {/* {obj.formData.studentadress} */}
+ Moharajpur,Gangarampur,D.Dinajpur
+</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+)
+
+
+      }
+
+
+
+
+
+
+
+
+
+           
+          </div>
+            </div>
+         </div>
+        </div>
+     <div>
+
+
        
         </div>
         </div>
         </div>
         </div>
-        </section>   
+        </section>  
          <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
                <b>Version</b> 3.2.0

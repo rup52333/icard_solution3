@@ -1,28 +1,80 @@
-import React, { useState } from 'react';
-import Logo from './assets/images/rvssGroup.png';
+  import React, { useState,useContext } from 'react';
+ import Logo from './assets/images/rvssGroup_white.png';
 import 'admin-lte/plugins/fontawesome-free/css/all.min.css';
 import 'admin-lte/plugins/daterangepicker/daterangepicker.js' ;
 import 'admin-lte/dist/css/adminlte.min.css';
 import 'admin-lte/dist/js/adminlte.min.js';
 import ImageUpload from './ImageUpload.js';
-
-
-
+import KVSIMG from './template/WhatsApp Image 2023-08-14 at 12.26.25 PM.jpeg';
+import {useNavigate} from 'react-router-dom';
+ import Icard_template from './template/Icard_template.jsx';
+ import {IcardContext} from './Context/DataProvider.jsx';
 function AdminLteForm() {
-    const [formState, setFormState] = useState({});
-  
-    const handleChange = (e) => {
-      setFormState({
-        ...formState,
-        [e.target.name]: e.target.value
-      });
-    }
-  
+   const navigate=useNavigate();
+   const [formState, setFormState] = useState({});
+
+   const [icardImage, setIcardImage] = useState('');
+
+   const handleChange = (e) => {
+       setFormState({
+           ...formState,
+           [e.target.name]: e.target.value
+       });
+   }
+
+
+
+   const handleImageUpload = (imageData) => {
+     
+       setIcardImage(imageData);
+   };
+   const [selectedTemplate, setSelectedTemplate] = useState(''); // State to store selected template
+
+   // Function to handle template selection
+   const handleTemplateChange = (event) => {
+     setSelectedTemplate(event.target.value);
+     console.log(selectedTemplate);
+   };
+
+   const {idcardtemplate}= useContext(IcardContext); // Import and destructure setAccount
+   
+   const {obj,setObj} = useContext(IcardContext); // Import and destructure setAccount
+      
+   const {icardimg} = useContext(IcardContext); // Import and destructure setAccount
+
     const handleSubmit = (e) => {
       e.preventDefault();
       // Handle form submission here
-    }
+      const formData = { ...formState };
+        const data = {
+            formData: formData,
+            icardImage: icardimg,
+            selectedTemplate: selectedTemplate
+        };
+       
+      console.log(icardImage);
+            console.log(idcardtemplate);
   
+        
+      //  console.log(data.formData.studentfname);
+        
+        setObj(data);
+      
+
+        
+        navigate(`/idcard`)
+
+    }
+
+   //  rupkumar code]
+  
+
+
+
+
+    const logoURL=`https://cdn.pixabay.com/photo/2014/04/02/10/35/book-303927_640.png`;
+
+
     return (
     
     <body class="hold-transition sidebar-mini">
@@ -151,7 +203,7 @@ function AdminLteForm() {
            </nav>
            <aside class="main-sidebar sidebar-dark-primary elevation-4">
            <a href="http://rvssgroup.com/"class="brand-link">
-              <img src={Logo} class="img-responsive" style={{ alignSelf: 'left' , marginRight: '120px'}}  />
+              <img src={Logo} class="img-responsive" style= {{ alignSelf: 'left' , marginRight: '120px'}}  />
            </a>
              <div class="sidebar">
              <div class="form-inline">
@@ -262,50 +314,71 @@ function AdminLteForm() {
                </div>
              </div>
            </aside>
+
            <div class="content-wrapper">
-           
-        <div className="card">
-         
-        <section class="content-header">
-               <div class="container-fluid">
-                  <div class="row mb-2">
-                     <div class="col-sm-6">
-                        <h1>Student Registration</h1>
-                     </div>
-                     <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                           <li class="breadcrumb-item"><a href="#">Home</a></li>
-                           <li class="breadcrumb-item active">General Form</li>
-                        </ol>
-                     </div>
-                  </div>
+
+        <div >
+
+      
+        <section class="content" >
+        <div class="container-fluid">
+               
+               <div style={{textAlign:'center'}}>
+                  <h2>Student Registration</h2>
                </div>
-            </section>
-        <section class="content">
+              
+          
+            <div>
+              <span>
+              <h4 style={{textAlign:'center'}}>Select your template by clicking on the template </h4>
+              </span>
+            <div style={{width: '100%',
+            height:'100%',
+  borderRadius: '12px',
+  paddingTop: '2%',
+  }} >
+              <Icard_template/>
+            </div>
+
+            </div>
+          
+
+         </div>
+         
         <div class="container-fluid">
         <div class="row">
-        <div class="col-md-6">
+         
+        <div class="col-md-6" style={{borderRadius: '10px',}}>
         <div className="card-body">
+       
+
+       
         <div class="card card-primary">
            <div class="card-header">
             <h3 class="card-title">Student Details</h3>
           </div>
+
           <form onSubmit={handleSubmit}>
+
+
             <div className="form-group">
               <label htmlFor="inputName">First Name</label>
-              <input type="text" name="fname" className="form-control" id="inputfName" placeholder="Enter First Name" onChange={handleChange} />
+              <input type="text" name="studentfname" className="form-control" id="inputfName" placeholder="Enter First Name" onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="inputName">Middle Name</label>
-              <input type="text" name="mname" className="form-control" id="inputmName" placeholder="Enter Middle Name" onChange={handleChange} />
+              <input type="text" name="studentmname" className="form-control" id="inputmName" placeholder="Enter Middle Name" onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="inputName">Last Name</label>
-              <input type="text" name="lname" className="form-control" id="inputlName" placeholder="Enter Last Name" onChange={handleChange} />
+              <input type="text" name="studentlname" className="form-control" id="inputlName" placeholder="Enter Last Name" onChange={handleChange} />
             </div>
             <div class="form-group">
                      <label>Student Blood Group</label>
-                                          <select class="custom-select">
+                                          <select class="custom-select"     name="studentbloodgrp" // Add a name attribute
+    className="custom-select"
+    id="bloodgrp"
+    onChange={handleChange}>
                                              <option>A+</option>
                                              <option>B+</option>
                                              <option>AB+</option>
@@ -315,13 +388,16 @@ function AdminLteForm() {
                                           </select>
             </div>
             <div class="form-group">
-<label>Student Date of Birth (DD/MM/YYYY):</label>
+            <label >Student Date of Birth (DD/MM/YYYY):</label>
 <div class="container">
    <div class="row">
       <div class='col-sm-6'>
          <div class="form-group">
             <div class='input-group date' id='datetimepicker3'>
-               <input type='text' class="form-control" />
+               <input               type="text"
+              className="form-control"
+              name="studentdob" // Add a name attribute
+              onChange={handleChange}  />
                <span class="input-group-addon">
                <span class="glyphicon glyphicon-time"></span>
                </span>
@@ -336,30 +412,33 @@ function AdminLteForm() {
    </div>
 </div>
 </div>
-
+<div className="form-group">
+              <label htmlFor="inputName">Adress</label>
+              <input type="text" name="studentadress" className="form-control" id="inputAdress" placeholder="Enter Your  Adress" onChange={handleChange} />
+            </div>
       <div class="card card-primary">
         <div class="card-header">
             <h3 class="card-title">Guardian Details</h3>
         </div>
             <div className="form-group">
               <label htmlFor="inputName">Guardian First Name</label>
-              <input type="text" name="fname" className="form-control" id="input_gf_Name" placeholder="Enter First Name" onChange={handleChange} />
+              <input type="text" name="guardianfname" className="form-control" id="input_gf_Name" placeholder="Enter First Name" onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="inputName">Guardian Last Name</label>
-              <input type="text" name="lname" className="form-control" id="input_gl_Name" placeholder="Enter Last Name" onChange={handleChange} />
+              <input type="text" name="guardianlname" className="form-control" id="input_gl_Name" placeholder="Enter Last Name" onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="inputName"> Guardian Primary Contact Number</label>
-              <input type="text" name="" className="form-control" id="input_gl_number" placeholder=" Enter Contact Number" onChange={handleChange} />
+              <input type="text" name="guardianmob" className="form-control" id="input_gl_number" placeholder=" Enter Contact Number" onChange={handleChange} />
        </div>
             <div className="form-group">
               <label htmlFor="inputEmail">Guardian Email</label>
               <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+               <span class="input-group-text"><i class="fas fa-envelope"></i></span>
               </div>
                                  
-              <input type="email" name="email" className="form-control" id="input_g_Email" placeholder="Guardian email" onChange={handleChange} />
+              <input type="email" name="guardianemail" className="form-control" id="input_g_Email" placeholder="Guardian email" onChange={handleChange} />
             </div>
          </div>
          <div class="card card-primary">
@@ -368,7 +447,10 @@ function AdminLteForm() {
         </div> 
         <div class="form-group">
                      <label>Salutation</label>
-                                          <select class="custom-select">
+                                          <select class="custom-select"     name="salutation" // Add a name attribute
+    className="custom-select"
+    id="salutation"
+    onChange={handleChange}>
                                              <option>Dr.</option>
                                              <option>Mr.</option>
                                              <option>Mrs.</option>
@@ -384,11 +466,11 @@ function AdminLteForm() {
               <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
               </div>
-              <input type="email" name="email" className="form-control" id="teacher_email" placeholder="Teacher Email" onChange={handleChange} />
+              <input type="email" name="temail" className="form-control" id="teacher_email" placeholder="Teacher Email" onChange={handleChange} />
         </div>
         <div className="form-group">
               <label htmlFor="inputName">Teacher Mobile Number 1</label>
-              <input type="text" name="lname" className="form-control" id="inputlName" placeholder=" Enter Teacher Mobile Number" onChange={handleChange} />
+              <input type="text" name="tmob" className="form-control" id="inputlName" placeholder=" Enter Teacher Mobile Number" onChange={handleChange} />
        </div>
        
         </div>
@@ -406,7 +488,7 @@ function AdminLteForm() {
         <div class="form-group">
         <label htmlFor="inputName">ICard Image</label>
             <div className="wrapper">
-               <ImageUpload image_id=''/>
+               <ImageUpload image_id='' onImageUpload={handleImageUpload} />
             </div>
          </div>
         <form>

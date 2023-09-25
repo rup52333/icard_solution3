@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState ,useContext,useEffect} from 'react';
 import axios, { AxiosError } from 'axios';
 import './MyComponent.css';
 
 //import { SftpClient } from 'ssh2-sftp-client';
-
+import {IcardContext} from './Context/DataProvider.jsx';
 
 function ImageUpload({school_id, image_id, onImageUpload}) {
+ const {setIcardimg} = useContext(IcardContext); // Import and destructure setAccount
+ const {setIcardLogo} = useContext(IcardContext); // Import and destructure setAccount
+
+
+
+  useEffect(() => {
+    setIcardimg(""); // Set it to an empty string, you can change this to your desired default value
+  }, []);
+   
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [isIframeVisible, setIsIframeVisible] = useState(false);
@@ -20,74 +29,103 @@ function ImageUpload({school_id, image_id, onImageUpload}) {
   };
 
   const handleFileChange = (event) => {
-   setNewName(schoolId+'_'+imageId+'_'+Date.now());
-   setfileName(schoolId+'_'+imageId+'_'+Date.now());
-   //const file = new Blob([event.target.files[0]],{type: 'image/jpeg' });
-    const uploadedFile = event.target.files[0];
-    setType(uploadedFile.type);
-    console.log(uploadedFile);
-    /*myRenamedFile = new File([uploadedFile],new_name, {
-      type: 'image/jpeg',
-  });*/
+    console.log(imageId);
+    setNewName(schoolId+'_'+imageId+'_'+Date.now());
+    setfileName(schoolId+'_'+imageId+'_'+Date.now());
+    //const file = new Blob([event.target.files[0]],{type: 'image/jpeg' });
+     const uploadedFile = event.target.files[0];
+     setType(uploadedFile.type);
+    // console.log(uploadedFile);
+     /*myRenamedFile = new File([uploadedFile],new_name, {
+       type: 'image/jpeg',
+   });*/
+     
+   
+    // setIcardimg(uploadedFile);
     
 
     const reader = new FileReader();
     reader.onchange = (e) => {
       const { result } = e.target;
    }
-    var newFile = new File([reader.readAsDataURL(uploadedFile),{type: 'image/jpeg' }],newName);
-    const imageUrl = URL.createObjectURL(uploadedFile);
-   // alert("URL "+imageUrl);
-    setImageUrl(imageUrl);
-    console.log("File Data  "+newFile+"  "+newFile.name);
-    setFile(uploadedFile);
-  };
-  const iframe = document.createElement('iframe');
+   var newFile = new File([reader.readAsDataURL(uploadedFile),{type: 'image/jpeg' }],newName);
+   const imageUrl = URL.createObjectURL(uploadedFile);
+ 
+   setIcardimg(imageUrl);
+    
 
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();    
-    formData.append('file', file);
-    const queryParams = 'fileName=' + fileName + '&type=' + encodeURIComponent(type);
-    try{
-    const response = await axios.post('http://localhost:8082/cap/sftp/api/v1/pushOrginalFile?'+queryParams, 
-    formData).catch(error => console.error("Data Error   "+error));
-    if (response.data) {
-     setfileName(null);
-      const imageData = {
-        imageId: imageId,
-        file_name: newName,
-        location : response.data,
-        };
-      onImageUpload(imageData);
-    } else {
-      // Handle the case when response.data is undefined or falsy
-      alert(response.data);
-    }
-  }catch (error) {
-    // Handle errors
-        alert("Problem in uploading the file");
         
+
+   setImageUrl(imageUrl);
+
+   
+    setIcardLogo(imageUrl);
+
+
+
+   console.log("File Data  "+newFile+"  "+newFile.name);
+   setFile(uploadedFile);
+   const imageData = {
+    imageId: imageId,
+  file_name: newName,
+  
+  location :  'fileName=' + fileName + '&type=' + encodeURIComponent(type),
+  };
+onImageUpload(imageData);
+ //console.log(imageData);
+
   }
-  }; /*Method to call api for uploading file in destination server usinfg axios*/
+
+ 
+
+
+ const iframe = document.createElement('iframe');
+
+
+ const handleSubmit = async (event) => {
+  event.preventDefault();
+  const formData = new FormData();    
+  formData.append('file', file);
+ // const queryParams = 'fileName=' + fileName + '&type=' + encodeURIComponent(type);
+//   try{
+//   const response = await axios.post('http://localhost:8082/cap/sftp/api/v1/pushOrginalFile?'+queryParams, 
+//   formData).catch(error => console.error("Data Error   "+error));
+//   if (response.data) {
+//    setfileName(null);
+//     const imageData = {
+//       imageId: imageId,
+//       file_name: newName,
+//       location : response.data,
+//       };
+//     onImageUpload(imageData);
+//   } else {
+//     // Handle the case when response.data is undefined or falsy
+//     alert(response.data);
+//   }
+// }catch (error) {
+//   // Handle errors
+//       alert("Problem in uploading the file");
+      
+// }
+}; /*Method to call api for uploading file in destination server usinfg axios*/
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData();
     formData.append('file', file);
-    // Replace the URL with the endpoint you want to send the file to
-    fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => {
-        // Handle response here
-      })
-      .catch((error) => {
-        // Handle error here
-      });
+    //Replace the URL with the endpoint you want to send the file to
+    // fetch('/api/upload', {
+    //   method: 'POST',
+    //   body: formData,
+    // })
+    //   .then((response) => {
+    //     // Handle response here
+    //   })
+    //   .catch((error) => {
+    //     // Handle error here
+    //   });
   }; /*Method to call api for uploading file in destination server*/
+
 
   return (
     <div>
